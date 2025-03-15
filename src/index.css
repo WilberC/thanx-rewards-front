@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@tailwind utilities;
+
+@layer utilities {
+    .border {
+        border-color: #e5e7eb;
+    }
+}
