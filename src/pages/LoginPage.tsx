@@ -5,19 +5,23 @@ import { useNavigate, Link } from "react-router-dom";
 const LoginPage = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError("");
+        setLoading(true);
 
         try {
             await login(email, password);
             navigate("/profile");
         } catch {
             setError("Invalid credentials. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -33,6 +37,7 @@ const LoginPage = () => {
                         className="w-full px-4 py-2 border rounded"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        disabled={loading}
                     />
                     <input
                         type="password"
@@ -40,9 +45,13 @@ const LoginPage = () => {
                         className="w-full px-4 py-2 border rounded"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        disabled={loading}
                     />
-                    <button className="w-full bg-green-700 text-white py-2 rounded hover:bg-green-600">
-                        Sign In
+                    <button
+                        className="w-full bg-green-700 text-white py-2 rounded hover:bg-green-600 disabled:bg-green-400"
+                        disabled={loading}
+                    >
+                        {loading ? "Signing in..." : "Sign In"}
                     </button>
                 </form>
                 <p className="text-center mt-4">
